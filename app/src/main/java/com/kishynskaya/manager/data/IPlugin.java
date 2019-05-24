@@ -11,6 +11,10 @@ public interface IPlugin {
 
     String getPackageName();
 
+    String getPackageNameService();
+
+    void setPackageNameService(String packageName);
+
     void setIcon(Drawable icon);
 
     Drawable getIcon();
@@ -21,8 +25,8 @@ public interface IPlugin {
 
     void tryEnable(boolean enable, Context context);
 
-     boolean isEnableNow();
+    boolean isEnableNow();
 
-     void setEnableNow(boolean enableNow);
+    void setEnableNow(boolean enableNow);
 
 }

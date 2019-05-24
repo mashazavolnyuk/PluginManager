@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         Intent startupIntent = new Intent(Intent.ACTION_MAIN);
         String FILTER_PLUGIN = "OWN_PLUGIN";
         startupIntent.addCategory(FILTER_PLUGIN);
-        List<ResolveInfo> resolveInfos = pm.queryIntentActivities(startupIntent, 0);
+        List<ResolveInfo> resolveInfos = pm.queryIntentServices(startupIntent, 0);
         for (ResolveInfo resolveInfo : resolveInfos) {
             Plugin plugin = PluginHelper.create(resolveInfo, pm);
             if (plugin != null) {

@@ -1,15 +1,17 @@
 package com.kishynskaya.manager.data;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 
 public class Plugin implements IPlugin {
 
     private String name;
     private Drawable icon;
     private String packageName;
+    private String packageNameService;
     private volatile boolean isEnable;
 
 
@@ -25,6 +27,16 @@ public class Plugin implements IPlugin {
 
     public String getPackageName() {
         return packageName;
+    }
+
+    @Override
+    public String getPackageNameService() {
+        return packageNameService;
+    }
+
+    @Override
+    public void setPackageNameService(String packageNameService) {
+        this.packageNameService = packageNameService;
     }
 
     @Override
@@ -63,20 +75,14 @@ public class Plugin implements IPlugin {
 
     @Override
     public void tryEnable(boolean enable, Context context) {
-        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-        Log.d("TAG", "tryEnable" + enable);
-        if (launchIntent != null) {
-            if (enable) {
-//                launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                launchIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                launchIntent.putExtra("ENABLE", true);
-                context.startActivity(launchIntent);
-            } else {
-//                launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                launchIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                launchIntent.putExtra("ENABLE", false);
-                context.startActivity(launchIntent);
-            }
+
+        Intent intent = new Intent();
+        String pkg = getPackageName();
+        String cls = getPackageNameService();
+        intent.setComponent(new ComponentName(pkg, cls));
+        if (!enable) {
+            intent.setAction("ACTION_STOP");
         }
+        ContextCompat.startForegroundService(context, intent);
     }
 }
