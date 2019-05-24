@@ -37,7 +37,7 @@ public class PluginsAdapter extends RecyclerView.Adapter<PluginsAdapter.ViewHold
         contextWeakReference = new WeakReference<>(context);
     }
 
-    public void startWaitingData() {
+    private void startWaitingData() {
         for (int i = 0; i < plugins.size(); i++) {
             startWaitingForItem(i);
         }

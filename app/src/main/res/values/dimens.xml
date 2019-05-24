@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="size_icon_adapter">55dp</dimen>
+    <dimen name="size_text">17sp</dimen>
+    <dimen name="min_margin_between_elements">4dp</dimen>
 </resources>

@@ -29,9 +29,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
 
-    private final String FILTER_PLUGIN = "OWN_PLUGIN";
     private final String DETECT_ENABLED_APPS = "DETECT_ENABLING_APPS";
-    private final String ENABLED_APP = "ENABLED_APP";
 
     private PackageManager packageManager;
     private PluginsAdapter pluginsAdapter;
@@ -57,19 +55,17 @@ public class MainActivity extends AppCompatActivity {
         pluginMap = new HashMap<>();
         packageManager = getPackageManager();
         handler = new Handler();
+        registerReceiver(new AppsExistReceiver(),getFilter(EXIST_APPS));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (appsExistReceiver == null) {
-            appsExistReceiver = new AppsExistReceiver();
-        }
         if (appsIsEnableReceiver == null) {
             appsIsEnableReceiver = new AppsIsEnableReceiver();
         }
         registerReceiver(appsIsEnableReceiver, getFilter(ENABLED_APPS));
-        registerReceiver(appsExistReceiver, getFilter(EXIST_APPS));
+
 
         updateListInstalledPlugins(packageManager);
         startUpdateStatesPlugin();
@@ -109,12 +105,6 @@ public class MainActivity extends AppCompatActivity {
         return intentFilter;
     }
 
-    private void updateStatesOfPlugins() {
-        List<IPlugin> plugins = new ArrayList<>(pluginMap.values());
-        for (IPlugin plugin:plugins)
-        pluginsAdapter.updateData(plugin);
-    }
-
     private void updatePluginsTask() {
         for (IPlugin plugin : pluginMap.values()) {
             if (plugin.isEnable() != plugin.isEnableNow()) {
@@ -126,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         resetEnableNow();
 
         Intent intent = new Intent();
+        String ENABLED_APP = "ENABLED_APP";
         intent.setAction(ENABLED_APP);
         sendBroadcast(intent);
     }
@@ -139,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateListInstalledPlugins(PackageManager pm) {
         Intent startupIntent = new Intent(Intent.ACTION_MAIN);
+        String FILTER_PLUGIN = "OWN_PLUGIN";
         startupIntent.addCategory(FILTER_PLUGIN);
         List<ResolveInfo> resolveInfos = pm.queryIntentActivities(startupIntent, 0);
         for (ResolveInfo resolveInfo : resolveInfos) {
@@ -154,13 +146,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (appsExistReceiver != null) {
-            unregisterReceiver(appsExistReceiver);
-        }
         if (appsIsEnableReceiver != null) {
             unregisterReceiver(appsIsEnableReceiver);
         }
         handler.removeCallbacksAndMessages(null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (appsExistReceiver != null) {
+            unregisterReceiver(appsExistReceiver);
+        }
+        super.onDestroy();
     }
 
     public class AppsExistReceiver extends BroadcastReceiver {
