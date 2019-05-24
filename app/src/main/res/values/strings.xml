@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Personal plugin manager</string>
+    <string name="icon">icon</string>
+
+    <string name="enable">enable</string>
+    <string name="disable">disable</string>
+</resources>
