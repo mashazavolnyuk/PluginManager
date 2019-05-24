@@ -4,27 +4,27 @@ import com.kishynskaya.manager.data.IPlugin;
 
 import java.util.Timer;
 
-public class PluginsAdapterItem {
+class PluginsAdapterItem {
     private IPlugin plugin;
     private Timer timer;
 
-    public PluginsAdapterItem(IPlugin plugin) {
+    PluginsAdapterItem(IPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public IPlugin getPlugin() {
+    IPlugin getPlugin() {
         return plugin;
     }
 
-    public void setPlugin(IPlugin plugin) {
+    void setPlugin(IPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public Timer getTimer() {
+    Timer getTimer() {
         return timer;
     }
 
-    public void setTimer(Timer timer) {
+    void setTimer(Timer timer) {
         this.timer = timer;
     }
 }

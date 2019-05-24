@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
         pluginMap = new HashMap<>();
         packageManager = getPackageManager();
         handler = new Handler();
-        registerReceiver(new AppsExistReceiver(),getFilter(EXIST_APPS));
+        appsExistReceiver = new AppsExistReceiver();
+        registerReceiver(appsExistReceiver, getFilter(EXIST_APPS));
     }
 
     @Override
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateListInstalledPlugins(PackageManager pm) {
+        pluginMap.clear();
         Intent startupIntent = new Intent(Intent.ACTION_MAIN);
         String FILTER_PLUGIN = "OWN_PLUGIN";
         startupIntent.addCategory(FILTER_PLUGIN);
